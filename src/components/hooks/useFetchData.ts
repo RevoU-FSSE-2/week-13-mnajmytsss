@@ -1,62 +1,38 @@
-import { useState, useEffect, useCallback } from "react";
+import axios, { AxiosRequestConfig } from "axios";
+import { useEffect, useState, useCallback } from "react";
 
-interface Props {
-    url: string;
-    method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH'
-    body?: BodyInit;
-    headers?: HeadersInit; 
+interface FetchListResult<T> {
+  data: T | null;
+  loading: boolean;
+  error: boolean;
 }
 
-const useFetchData = <T>({url, method, body, headers}: Props) => {
-    const [isLoading, setLoading] = useState<boolean>(false);
-    const [data, setData] = useState<T[]>([]);
+const useFetchData = <T>(options: AxiosRequestConfig): FetchListResult<T> => {
+  const [data, setData] = useState<T | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
 
-    const fetchData = useCallback(
-        async () => {
-            setLoading(true);
-            const requestHeaders: HeadersInit = {
-                ...(headers || {}),
-            };
+  const fetchData = useCallback(() => {
+    setLoading(true);
+    axios(options)
+      .then((response) => {
+        setData(response.data.data);
+      })
+      .catch((error) => {
+        console.error(error);
+        setError(true);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [options]);
 
-            const request = {
-                method: method,
-                headers: requestHeaders, 
-                ...(body && {body: body}),
-            };
-            
-            try {
-                const fetching = await fetch(url, request);
-    
-                if (!fetching.ok) {
-                    throw new Error(`HTTP Error! Status: ${fetching.status}`);
-                }
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line
+  }, []);
 
-                const response = await fetching.json();
-                setData(response.data);
-                setLoading(false);
-    
-                return response;
-            } catch (error) {
-
-                console.error('Error fetching data:', error);
-                setLoading(false);
-                throw error;
-            }
-        },
-        [body, method, url, headers] 
-    );
-
-    useEffect(
-        () => {
-            fetchData();
-        },
-        []
-    );
-
-    return {
-        isLoading,
-        data
-    };
-}
+  return { data, loading, error };
+};
 
 export default useFetchData;

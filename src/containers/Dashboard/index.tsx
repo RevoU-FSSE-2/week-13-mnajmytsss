@@ -72,7 +72,7 @@ const Dashboard: React.FC = () => {
       title: 'Status',
       dataIndex: 'is_active',
       key: 'is_active',
-
+  
       render: (isActive) => (
         <span>{isActive ? 'Active' : 'Deactive'}</span>
       ),
