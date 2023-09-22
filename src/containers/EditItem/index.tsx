@@ -35,7 +35,7 @@ const { id } = useParams<{ id: string }>();
           text: 'You have successfully updated the item!',
         }).then((result) => {
           if (result.isConfirmed) {
-            console.log('biji');
+            console.log('success');
     }
 });
       }).catch((error) => {
