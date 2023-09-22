@@ -6,7 +6,6 @@ import Dashboard from "./containers/Dashboard";
 import EditItem from "./containers/EditItem";
 import AddItem from "./containers/AddItem";
 import PublicLayout from "./Layout/PublicLayout";
-import AnotherLayout from "./Layout/AnotherLayout";
 import AppProvider from "./Provider/AppProvider";
 
 function App() {
@@ -31,22 +30,9 @@ function App() {
           element: <AddItem />
         },
         {
-          path: '/edit-item',
+          path: '/edit-item/:id',
           element: <EditItem />
 }
-      ]
-    },
-    {
-      element: <AnotherLayout />,
-      children: [
-        {
-          path: '/login',
-          element: <>login page</>
-        },
-        {
-          path: '/register',
-          element: <>register page</>
-        }
       ]
     }
   ])

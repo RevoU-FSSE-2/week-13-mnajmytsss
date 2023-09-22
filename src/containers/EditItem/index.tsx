@@ -1,35 +1,80 @@
-import { Button, Form, Input, Select, Card, Space } from "antd";
+import React from 'react';
+import { Button, Form, Input, Select, Card, Space } from 'antd';
+import { useNavigate, useParams } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import axios from 'axios'
 
 const { Option } = Select;
 
-const EditItem = () => {
+interface EditPage {
+  id: string,
+  name: string,
+  is_active: boolean
+}
 
+const EditItem: React.FC = () => {
 
-  const onFinish = (values: unknown) => {
-    console.log(values); 
+const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const validate = localStorage.getItem('token');
+
+  const onFinish = (values: EditPage) => {
+    console.log(values);
+
+    axios.put(`https://mock-api.arikmpt.com/api/category/update`, {
+      id: id,
+          name: values?.name,
+          is_active: values?.is_active,
+
+        }, { headers: { Authorization: `Bearer ${validate}` } })
+      .then((response) => {
+        console.log('Update successful', response.data);
+        Swal.fire({
+          icon: 'success',
+          title: 'Update Successful',
+          text: 'You have successfully updated the item!',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.replace('/dashboard');
+    }
+});
+      }).catch((error) => {
+        console.log(error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Update Failed',
+          text: 'An error occurred during update. Please try again.',
+        });
+      });
   };
 
   return (
-    <Card title="Edit Category">
-      <Form name="control-ref" onFinish={onFinish} style={{ width: 200 }}>
-        <Form.Item name="name">
-          <Input placeholder="Name" />
+    <Card title="Edit New Category" style={{ width: '300px', padding: '20px' }}>
+      <Form
+        name="add-item-form"
+        onFinish={onFinish}
+        style={{ maxWidth: 600 }}
+      >
+      <Form.Item name="name" rules={[{ required: true }]}>
+          <Input
+            placeholder='Name'
+            allowClear />
         </Form.Item>
-        <Form.Item name="status">
+        
+        <Form.Item name="is_active" rules={[{ required: true }]}>
           <Select
-            placeholder="Select a option and change input text below"
+            placeholder="Select a status option"
             allowClear
           >
-            <Option value="active">Active</Option>
-            <Option value="deactive">Deactive</Option>
+            <Option value="true">Active</Option>
+            <Option value="false">Deactive</Option>
           </Select>
         </Form.Item>
+
         <Form.Item>
           <Space>
-            <Button type="primary" htmlType="submit">
-              SUBMIT
-            </Button>
-            <Button href="/dashboard" htmlType="button">BACK</Button>
+            <Button type="primary" htmlType="submit">Submit</Button>
+            <Button htmlType="button" onClick={() => { navigate('/dashboard') }}>Back</Button>
           </Space>
         </Form.Item>
       </Form>

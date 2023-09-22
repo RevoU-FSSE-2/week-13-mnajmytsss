@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Button, Space, Table, Card } from 'antd';
 import { useFetchData } from '../../components/hooks'
 import { useNavigate } from 'react-router-dom';
@@ -12,16 +12,43 @@ interface DataType {
   is_active: boolean;
 }
 
+interface DataProfile {
+  name?: string;
+}
+
 const Dashboard: React.FC = () => {
   const navigate = useNavigate();
   const validate = localStorage.getItem('token');
-  const { data } = useFetchData<DataType[]>({
-    url: 'https://mock-api.arikmpt.com/api/category',
+
+  if (!validate) {
+    navigate('/')
+  }
+
+  const [dataList, setData] = useState<DataType[]>([]);
+
+  const { data } = useFetchData<DataProfile>({
+    url: 'https://mock-api.arikmpt.com/api/user/profile',
     method: 'GET',
     headers: {
       Authorization: `Bearer ${validate}`,
     },
   });
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const fetchData = () => {
+    axios.get('https://mock-api.arikmpt.com/api/category',
+      { headers: { Authorization: `Bearer ${validate}` } })
+      .then((response) => {
+        console.log('Get successful', response.data.data);
+        setData(response.data.data);
+      }).catch((error) => {
+        console.log(error);
+      });
+  }
 
   const handleDelete = (id: string) => {
     axios.delete(`https://mock-api.arikmpt.com/api/category/${id}`, {
@@ -29,23 +56,12 @@ const Dashboard: React.FC = () => {
     })
       .then((response) => {
         console.log('Delete successful', response.data);
-        navigate(0)
-        const Toast = Swal.mixin({
-          toast: true,
-          position: 'top-end',
-          showConfirmButton: false,
-          timer: 1000,
-          timerProgressBar: true,
-          didOpen: (toast) => {
-            toast.addEventListener('mouseenter', Swal.stopTimer)
-            toast.addEventListener('mouseleave', Swal.resumeTimer)
-          }
-        })
-        
-        Toast.fire({
+        Swal.fire({
           icon: 'success',
-          title: 'Item Successfully deleted!'
-        })
+          title: 'Delete Successful',
+          text: 'You have successfully deleted the category.',
+        });
+        fetchData();
       })
       .catch((error) => {
         console.log(error);
@@ -72,7 +88,7 @@ const Dashboard: React.FC = () => {
       title: 'Status',
       dataIndex: 'is_active',
       key: 'is_active',
-  
+
       render: (isActive) => (
         <span>{isActive ? 'Active' : 'Deactive'}</span>
       ),
@@ -99,7 +115,7 @@ const Dashboard: React.FC = () => {
   const handleLogout = () => {
     Swal.fire({
       title: 'Do you really want to Logout ?',
-      width: 400,
+      width: 600,
       padding: '3em',
       color: '#716add',
       showCancelButton: true,
@@ -108,30 +124,32 @@ const Dashboard: React.FC = () => {
       if (result.isConfirmed) {
         Swal.fire({
           title: 'See you again !',
-          width: 400,
+          width: 600,
           padding: '3em',
           color: '#716add',
         })
-        navigate('/')
+        window.location.replace('/')
         localStorage.removeItem('token');
       }
     })
   }
 
   return (
-    <Card title="LIST OF CATEGORY" style={{ padding: '20px' }}>
+    <Card title="DASHBOARD CATEGORY" style={{ padding: '20px' }}>
       <Form.Item>
         <Button type="primary" className="login-link" onClick={() => { navigate('/add-item') }} style={{ marginRight: '550px' }}>Add New Category</Button>
         <Button type="primary" className="login-link" onClick={handleLogout}>Logout</Button>
       </Form.Item>
-
-      {data ? (
+      <div>
+        name: {data?.name}
+      </div>
+      {dataList ? (
         <Table
+          dataSource={dataList}
           columns={columns}
-          dataSource={data}
           pagination={{
             pageSize: 5,
-            total: data.length
+            total: dataList.length
           }}
           style={{ width: '800px' }}
         />
@@ -141,5 +159,6 @@ const Dashboard: React.FC = () => {
     </Card>
   );
 };
+
 
 export default Dashboard;

@@ -13,7 +13,7 @@ interface AddPage {
 
 const initialValues = {
   name: '',
-  status:'',
+  status: '',
 };
 
 const validationSchema = yup.object().shape({
@@ -33,8 +33,8 @@ const AddForm : React.FC = () => {
       await axios.post(
         'https://mock-api.arikmpt.com/api/category/create',
         {
-          name: values.name,
-          is_active: values.is_active,
+          name: values?.name,
+          is_active: values?.is_active,
         },
         {
           headers: {
@@ -81,7 +81,7 @@ const AddForm : React.FC = () => {
             <Button type="primary" htmlType="submit">
               SUBMIT
             </Button>
-            <Button href="/table" htmlType="button">BACK</Button>
+            <Button href="/dashboard" htmlType="button">BACK</Button>
           </Space>
         </Form.Item>
       </Form>
