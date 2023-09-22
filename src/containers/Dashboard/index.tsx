@@ -96,7 +96,7 @@ const Dashboard: React.FC = () => {
         { text: 'Active', value: true },
         { text: 'Deactive', value: false },
       ],
-      onFilter: (value, record) => record.is_active === value,
+      onFilter: (value, record) => (value && record.is_active) || (!value && record.is_active),
     },
     {
       title: 'Action',

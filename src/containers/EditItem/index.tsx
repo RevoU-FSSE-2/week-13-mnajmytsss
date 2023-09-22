@@ -49,7 +49,7 @@ const { id } = useParams<{ id: string }>();
   };
 
   return (
-    <Card title="Edit New Category" style={{ width: '300px', padding: '20px' }}>
+    <Card title="Edit Category" style={{ width: '300px', padding: '20px' }}>
       <Form
         name="add-item-form"
         onFinish={onFinish}
@@ -61,7 +61,7 @@ const { id } = useParams<{ id: string }>();
             allowClear />
         </Form.Item>
         
-        <Form.Item name="is_active" rules={[{ required: true }]}>
+        <Form.Item name="status" rules={[{ required: true }]}>
           <Select
             placeholder="Select a status option"
             allowClear
