@@ -1,25 +1,61 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import Category from './containers/Category'
-import Register from './containers/Register'
-import './App.css'
-import Login from './containers/Login'
-import EditCategory from './containers/EditCategory'
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import Register from "./containers/Register";
+import "./App.css";
+import Login from "./containers/Login";
+import Dashboard from "./containers/Dashboard";
+import EditItem from "./containers/EditItem";
+import AddItem from "./containers/AddItem";
+import PublicLayout from "./Layout/PublicLayout";
+import AnotherLayout from "./Layout/AnotherLayout";
+import AppProvider from "./Provider/AppProvider";
 
 function App() {
-
+  const router = createBrowserRouter([
+    {
+      element: <PublicLayout />,
+      children: [
+        {
+          path: '/register',
+          element: <Register />
+        },
+        {
+          path: '/',
+          element: <Login />
+        },
+        {
+          path: '/dashboard',
+          element: <Dashboard />
+        },
+        {
+          path: '/add-item',
+          element: <AddItem />
+        },
+        {
+          path: '/edit-item',
+          element: <EditItem />
+}
+      ]
+    },
+    {
+      element: <AnotherLayout />,
+      children: [
+        {
+          path: '/login',
+          element: <>login page</>
+        },
+        {
+          path: '/register',
+          element: <>register page</>
+        }
+      ]
+    }
+  ])
 
   return (
-    <>
-      <Router>
-        <Routes>
-          <Route path="/register" element={<Register />}/>
-          <Route path="/category" element={<Category />}/>
-          <Route path="/" element={<Login />}/>
-          <Route path="/editcategory" element={<EditCategory />}/>
-        </Routes>
-      </Router>
-    </>
+    <AppProvider>
+      <RouterProvider router={router}/>
+    </AppProvider>
   )
 }
 
-export default App
+export default App;

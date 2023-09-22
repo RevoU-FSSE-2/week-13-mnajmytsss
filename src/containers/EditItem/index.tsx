@@ -2,11 +2,11 @@ import { Button, Form, Input, Select, Card, Space } from "antd";
 
 const { Option } = Select;
 
-const EditCategory = () => {
-  //   const onStatusChange = () => {};
+const EditItem = () => {
+
 
   const onFinish = (values: unknown) => {
-    console.log(values);
+    console.log(values); 
   };
 
   return (
@@ -18,7 +18,6 @@ const EditCategory = () => {
         <Form.Item name="status">
           <Select
             placeholder="Select a option and change input text below"
-            // onChange={onStatusChange}
             allowClear
           >
             <Option value="active">Active</Option>
@@ -30,7 +29,7 @@ const EditCategory = () => {
             <Button type="primary" htmlType="submit">
               SUBMIT
             </Button>
-            <Button htmlType="button">BACK</Button>
+            <Button href="/dashboard" htmlType="button">BACK</Button>
           </Space>
         </Form.Item>
       </Form>
@@ -38,4 +37,4 @@ const EditCategory = () => {
   );
 };
 
-export default EditCategory;
+export default EditItem;

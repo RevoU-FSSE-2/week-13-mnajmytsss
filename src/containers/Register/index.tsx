@@ -65,7 +65,7 @@ const Register = () => {
     <Card title="Register Form">
       <Form
         name="basic"
-        style={{width: '300px', height: '270px'}}
+        style={{width: '390px', height: '270px'}}
         onFinish={formik.handleSubmit}
         autoComplete="off"
       >
