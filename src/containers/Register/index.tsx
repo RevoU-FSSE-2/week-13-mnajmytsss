@@ -62,10 +62,18 @@ const Register = () => {
   });
 
   return (
-    <Card title="Register Form">
+    <Card title="Register Form"
+    style={{
+      maxWidth: "400px",
+      width: "100%",
+      padding: "20px",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center"}}>
       <Form
         name="basic"
-        style={{width: '390px', height: '270px'}}
+        style={{width: '270px', height: '270px'}}
         onFinish={formik.handleSubmit}
         autoComplete="off"
       >
@@ -118,7 +126,7 @@ const Register = () => {
           <Typography style={{marginBottom: '5px'}}>
           if you already have account
           </Typography>
-          <a type="primary" className="login-link" href='/'> Login here </a>
+          <a type="primary" className="login-link" href='/login'> Login here </a>
         </Form.Item>
       </Form>
     </Card>

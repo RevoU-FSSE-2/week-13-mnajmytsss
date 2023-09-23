@@ -43,12 +43,25 @@ const Login = () => {
           localStorage.setItem("token", data.data.token);
 
           console.log("Success login :", data);
-          Swal.fire({
-            icon: "success",
-            title: "Login success",
-            text: "You have successfully logged in. You will be redirect to dashboard shortly",
-          });
-          navigate("/dashboard");
+          const Toast = Swal.mixin({
+            toast: true,
+            position: 'top-end',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+          })
+          
+          Toast.fire({
+            icon: 'success',
+            title: '  You have successfully logged in. You will be redirect to dashboard shortly'
+          })
+          setTimeout(() => {
+            navigate("/dashboard");
+          }, 3000);
         })
         .catch((error) => {
           console.log(error);
@@ -60,6 +73,7 @@ const Login = () => {
         });
     },
   });
+
 
   return (
     <Card title="Login Form">
@@ -113,7 +127,7 @@ const Login = () => {
             LOGIN
           </Button>
           <Typography style={{ marginBottom: "5px" }}>Or</Typography>
-          <a type="primary" className="register-link" href="/register">
+          <a type="primary" className="register-link" href="/">
             Register here{" "}
           </a>
         </Form.Item>

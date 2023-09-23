@@ -14,34 +14,38 @@ function App() {
       element: <PublicLayout />,
       children: [
         {
-          path: '/register',
-          element: <Register />
+          path: "/",
+          element: <Register />,
         },
         {
-          path: '/',
-          element: <Login />
+          path: "/login",
+          element: <Login />,
         },
         {
-          path: '/dashboard',
-          element: <Dashboard />
+          path: "/dashboard",
+          element: <Dashboard />,
         },
         {
-          path: '/add-item',
-          element: <AddItem />
+          path: "/add-item",
+          element: <AddItem />,
         },
         {
-          path: '/edit-item/:id',
-          element: <EditItem />
-}
-      ]
-    }
-  ])
+          path: "/edit-item/:id",
+          element: <EditItem />,
+        },
+      ],
+    },
+
+    
+  ]);
 
   return (
-    <AppProvider>
-      <RouterProvider router={router}/>
-    </AppProvider>
-  )
+    <>
+      <AppProvider>
+        <RouterProvider router={router} />
+      </AppProvider>
+    </>
+  );
 }
 
 export default App;

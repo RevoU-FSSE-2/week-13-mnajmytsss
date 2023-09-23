@@ -29,13 +29,25 @@ const { id } = useParams<{ id: string }>();
         }, { headers: { Authorization: `Bearer ${validate}` } })
       .then((response) => {
         console.log('Update successful', response.data);
-        Swal.fire({
+        navigate('/dashboard');
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 2000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+          }
+        })
+        
+        Toast.fire({
           icon: 'success',
-          title: 'Update Successful',
-          text: 'You have successfully updated the item!',
+          title: 'Data successfully submited!'
         }).then((result) => {
           if (result.isConfirmed) {
-            navigate('/dashboard');
+            console.log('biji');
     }
 });
       }).catch((error) => {
@@ -49,7 +61,14 @@ const { id } = useParams<{ id: string }>();
   };
 
   return (
-    <Card title="Edit Category" style={{ width: '300px', padding: '20px' }}>
+    <Card title="Edit Category" style={{
+      maxWidth: "400px",
+      width: "100%",
+      padding: "20px",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center"}}>
       <Form
         name="add-item-form"
         onFinish={onFinish}

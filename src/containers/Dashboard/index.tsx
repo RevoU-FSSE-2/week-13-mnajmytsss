@@ -56,11 +56,22 @@ const Dashboard: React.FC = () => {
     })
       .then((response) => {
         console.log('Delete successful', response.data);
-        Swal.fire({
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 1000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+          }
+        })
+        
+        Toast.fire({
           icon: 'success',
-          title: 'Delete Successful',
-          text: 'You have successfully deleted the category.',
-        });
+          title: 'Data successfully removed'
+        })
         fetchData();
       })
       .catch((error) => {
@@ -104,7 +115,7 @@ const Dashboard: React.FC = () => {
       render: (_, id) => (
         <>
           <Space size="middle">
-            <Button type='primary' onClick={() => { navigate(`/edit-item/${id.id}`) }}>Edit</Button>
+            <Button type='primary' onClick={() => { navigate(`/edit-item/${id.id}`) }}>Edit Status</Button>
             <Button type="primary" danger ghost onClick={() => handleDelete(id.id)}>Delete</Button>
           </Space>
         </>
@@ -117,7 +128,7 @@ const Dashboard: React.FC = () => {
       title: 'Do you really want to Logout ?',
       width: 600,
       padding: '3em',
-      color: '#716add',
+      color: '#7D7C7C',
       showCancelButton: true,
       confirmButtonText: 'Logout',
     }).then((result) => {
@@ -126,19 +137,27 @@ const Dashboard: React.FC = () => {
           title: 'See you again !',
           width: 600,
           padding: '3em',
-          color: '#716add',
+          color: '#7D7C7C',
         })
-        window.location.replace('/')
+        window.location.replace('/login')
         localStorage.removeItem('token');
       }
     })
   }
 
   return (
-    <Card title="DASHBOARD CATEGORY" style={{ padding: '20px' }}>
+    <Card title="DASHBOARD CATEGORY" style={{
+      maxWidth: "1000px",
+      width: "100%",
+      padding: "20px",
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "center",
+      alignItems: "center",
+    }}>
       <Form.Item>
         <Button type="primary" className="login-link" onClick={() => { navigate('/add-item') }} style={{ marginRight: '550px' }}>Add New Category</Button>
-        <Button type="primary" className="login-link" onClick={handleLogout}>Logout</Button>
+        <Button type="primary" className="login-link" onClick={handleLogout} >Logout</Button>
       </Form.Item>
       <div>
         name: {data?.name}
